@@ -1,0 +1,35 @@
+version: "3"
+networks:
+  ytt:
+    # external: true
+    # name: host
+
+services:
+  # BrowserUpMitmProxyClient
+  # python ./release/cibuild.py build
+  # https://stackoverflow.com/questions/62334867/how-are-the-pre-compiled-mitmproxy-binaries-actually-built
+  # https://docs.docker.com/compose/startup-order/
+  # https://8thlight.com/blog/dariusz-pasciak/2016/10/17/docker-compose-wait-for-dependencies.html
+  # https://www.datanovia.com/en/lessons/docker-compose-wait-for-container-using-wait-tool/docker-compose-wait-for-postgres-container-to-be-ready/
+  mitmproxyserver:
+    build: 
+      context: .
+      dockerfile: ./dockerfile/mitmproxyserver.dockerfile
+    tty: true
+    ports:
+      - "10080:8080"
+      - "10088:8088"
+    # environment:
+    #   - HUB_HOST=selenium-hub
+    #   - BMP_HOST=yttproxyserver
+    volumes:
+      - ./dockerfile/mitmproxy/.mitmproxy:/home/mitmproxy/.mitmproxy
+      - ./:/data
+    # depends_on:
+    #   - chromedriver
+    # network_mode: "bridge"
+    networks:
+      - ytt
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    # command: ["./wait-for-it.sh", "localhost:4444/grid/api/hub", "--", "python", "./test.py"]

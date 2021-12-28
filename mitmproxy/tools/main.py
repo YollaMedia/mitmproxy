@@ -154,3 +154,23 @@ def mitmweb(args=None) -> typing.Optional[int]:  # pragma: no cover
     from mitmproxy.tools import web
     run(web.master.WebMaster, cmdline.mitmweb, args)
     return None
+
+ # ========== YMPB ==========
+def browserupproxy(args=None) -> typing.Optional[int]:  # pragma: no cover
+    from mitmproxy.tools import browserup_proxy
+
+    def extra(args):
+        if args.filter_args:
+            v = " ".join(args.filter_args)
+            return dict(
+                save_stream_filter=v,
+                readfile_filter=v,
+                dumper_filter=v,
+            )
+        return {}
+
+    m = run(browserup_proxy.BrowserupProxyMaster, cmdline.mitmdump, args, extra)
+    if m and m.errorcheck.has_errored:  # type: ignore
+        return 1
+    return None
+ # ========== YMPB ==========

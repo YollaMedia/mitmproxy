@@ -61,6 +61,7 @@ setup(
             "mitmproxy = mitmproxy.tools.main:mitmproxy",
             "mitmdump = mitmproxy.tools.main:mitmdump",
             "mitmweb = mitmproxy.tools.main:mitmweb",
+            "browserup-proxy = mitmproxy.tools.main:browserupproxy",  # YMPB
         ]
     },
     python_requires='>=3.8',
@@ -94,6 +95,15 @@ setup(
         "wsproto>=1.0,<1.1",
         "publicsuffix2>=2.20190812,<3",
         "zstandard>=0.11,<0.17",
+        # ========= YMPB =========
+        "falcon~=2.0.0",
+        "marshmallow>=3.0.0",
+        "falcon-apispec>=0.4.0",
+        "python-dateutil>=2.8.1",
+        "glom>=20.11.0",
+        "jsonschema>=3.2.0",
+        "jsonpath_ng>=1.5.3",
+        # ========= YMPB =========
     ],
     extras_require={
         ':sys_platform == "win32"': [
