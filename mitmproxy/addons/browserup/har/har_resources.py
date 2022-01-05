@@ -65,6 +65,7 @@ class NoEntriesResponseMixin:
 
 
 class HarResource(RespondWithHarMixin):
+    print(" => HarResource")
     def apispec(self, spec):
         path = os.path.abspath(os.path.dirname(__file__) + '/../schemas/*.json')
         files = glob.glob(path)
@@ -98,6 +99,8 @@ class HarResource(RespondWithHarMixin):
                   $ref: "#/components/schemas/Har"
         """
         clean_har = req.get_param('cleanHar') == 'true'
+        # file_name = req.get_param('fileName')
+        
         har = self.HarCaptureAddon.get_har(clean_har)
 
         filtered_har = self.HarCaptureAddon.filter_har_for_report(har)
@@ -107,7 +110,10 @@ class HarResource(RespondWithHarMixin):
             self.HarCaptureAddon.mark_har_entries_submitted(har)
         self.respond_with_har(resp, har, har_file)
 
+
     def on_put(self, req, resp):
+        print(" => HarResource on output")
+
         """Starts or resets the Har capture session, returns the last session.
         ---
         description: Starts a fresh HAR capture session.
@@ -130,6 +136,7 @@ class HarResource(RespondWithHarMixin):
 
 
 class HarPageResource(RespondWithHarMixin):
+    print(" => HarPageResource")
 
     def __init__(self, HarCaptureAddon):
         self.HarCaptureAddon = HarCaptureAddon
@@ -163,6 +170,8 @@ class HarPageResource(RespondWithHarMixin):
                         schema:
                             $ref: "#/components/schemas/Har"
         """
+        print(" => HarPageResource on_post")
+
         page_title = req.get_param('title')
         har = self.HarCaptureAddon.new_page(page_title)
         har_file = self.HarCaptureAddon.save_har(har)

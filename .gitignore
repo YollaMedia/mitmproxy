@@ -33,3 +33,4 @@ web/coverage/
 
 dockerfile/mitmproxy/.mitmproxy
 !dockerfile/mitmproxy/.mitmproxy/*.yaml
+/hardump

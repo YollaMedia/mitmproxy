@@ -473,17 +473,21 @@ def build():  # pragma: no cover
     be = BuildEnviron.from_env()
     be.dump_info()
 
-    be.check_version()
+    # YMPB
+    # be.check_version()
     os.makedirs(be.dist_dir, exist_ok=True)
 
-    if be.should_build_wheel:
-        build_wheel(be)
-    if be.should_build_docker:
-        build_docker_image(be)
-    if be.should_build_pyinstaller:
-        build_pyinstaller(be)
-    if be.should_build_wininstaller:
-        build_wininstaller(be)
+    build_wheel(be) # YMPB
+    build_docker_image(be) # YMPB
+    
+    # if be.should_build_wheel:
+    #     build_wheel(be)
+    # if be.should_build_docker:
+    #     build_docker_image(be)
+    # if be.should_build_pyinstaller:
+    #     build_pyinstaller(be)
+    # if be.should_build_wininstaller:
+    #     build_wininstaller(be)
 
 
 @cli.command("upload")
