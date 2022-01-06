@@ -20,6 +20,6 @@ VOLUME /home/mitmproxy/.mitmproxy
 COPY docker-entrypoint.sh /usr/local/bin/
 ENTRYPOINT ["docker-entrypoint.sh"]
 
-EXPOSE 8080 8081
+EXPOSE 8080 8081 8088
 
 CMD ["mitmproxy"]

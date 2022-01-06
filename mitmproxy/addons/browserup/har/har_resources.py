@@ -5,7 +5,6 @@ import json
 import falcon
 from mitmproxy.addons.browserup.har.har_verifications import HarVerifications
 from mitmproxy.addons.browserup.har.har_capture_types import HarCaptureTypes
-
 from mitmproxy.addons.browserup.har.har_schemas import ErrorSchema, CounterSchema, MatchCriteriaSchema
 from marshmallow import ValidationError
 
@@ -65,7 +64,6 @@ class NoEntriesResponseMixin:
 
 
 class HarResource(RespondWithHarMixin):
-    print(" => HarResource")
     def apispec(self, spec):
         path = os.path.abspath(os.path.dirname(__file__) + '/../schemas/*.json')
         files = glob.glob(path)
@@ -136,8 +134,6 @@ class HarResource(RespondWithHarMixin):
 
 
 class HarPageResource(RespondWithHarMixin):
-    print(" => HarPageResource")
-
     def __init__(self, HarCaptureAddon):
         self.HarCaptureAddon = HarCaptureAddon
 

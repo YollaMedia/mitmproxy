@@ -7,7 +7,7 @@ set -o nounset
 
 MITMPROXY_PATH="/home/mitmproxy/.mitmproxy"
 
-if [[ "$1" = "mitmdump" || "$1" = "mitmproxy" || "$1" = "mitmweb" ]]; then
+if [[ "$1" = "mitmdump" || "$1" = "mitmproxy" || "$1" = "mitmweb" || "$1" = "browserup-proxy" ]]; then
   mkdir -p "$MITMPROXY_PATH"
   chown -R mitmproxy:mitmproxy "$MITMPROXY_PATH"
   gosu mitmproxy "$@"
