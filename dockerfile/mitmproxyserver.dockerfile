@@ -34,4 +34,4 @@ RUN python3 -m venv venv \
     && venv/bin/pip install -e ".[dev]"
 
 # CMD "source venv/bin/activate && mitmdump --version"
-# browserup-proxy --set confdir=/data/dockerfile/mitmproxy/.mitmproxy
+# browserup-proxy --set confdir=/home/mitmproxy/.mitmproxy

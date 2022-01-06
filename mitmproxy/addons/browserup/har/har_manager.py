@@ -161,8 +161,6 @@ class HarManagerMixin():
 
         self.end_page()
         self.har = None
-
-        # return # YMPB
         return old_har
 
     def copy_entries_without_response(self, old_har):

@@ -244,6 +244,7 @@ class BuildEnviron:
 
     @property
     def version(self) -> str:
+        return "8.0.0" # YMPB
         if self.tag:
             if self.tag.startswith("v"):
                 try:
@@ -478,7 +479,7 @@ def build():  # pragma: no cover
     os.makedirs(be.dist_dir, exist_ok=True)
 
     build_wheel(be) # YMPB
-    build_docker_image(be) # YMPB
+    # build_docker_image(be) # YMPB
     
     # if be.should_build_wheel:
     #     build_wheel(be)
