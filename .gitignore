@@ -31,6 +31,5 @@ coverage.xml
 web/coverage/
 .mypy_cache/
 
-dockerfile/mitmproxy/.mitmproxy
-!dockerfile/mitmproxy/.mitmproxy/*.yaml
-/hardump
+# /dockerfile/mitmproxy/\.mitmproxy/
+# !/dockerfile/mitmproxy/\.mitmproxy/*.yaml
