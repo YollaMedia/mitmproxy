@@ -1,4 +1,4 @@
-mode: "upstream:http://host.docker.internal:1088"
+mode: "upstream:http://host.docker.internal:1082"
 ssl_insecure: True
 block_global: False
 listen_host: "0.0.0.0"
