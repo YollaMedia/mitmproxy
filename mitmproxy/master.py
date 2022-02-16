@@ -6,7 +6,6 @@ import traceback
 
 from mitmproxy import addonmanager, hooks
 from mitmproxy import command
-from mitmproxy import controller
 from mitmproxy import eventsequence
 from mitmproxy import http
 from mitmproxy import log
@@ -92,7 +91,7 @@ class Master:
             # This all needs to be simplified when the proxy server runs on asyncio as well.
             if not self.event_loop.is_running():  # pragma: no cover
                 try:
-                    self.event_loop.run_until_complete(asyncio.wrap_future(ret))
+                    self.event_loop.run_until_complete(asyncio.wrap_future(ret, loop=self.event_loop))
                 except RuntimeError:
                     pass  # Event loop stopped before Future completed.
 
@@ -115,6 +114,5 @@ class Master:
         if isinstance(f, http.HTTPFlow):
             self._change_reverse_host(f)
 
-        f.reply = controller.DummyReply()
         for e in eventsequence.iterate(f):
             await self.addons.handle_lifecycle(e)
