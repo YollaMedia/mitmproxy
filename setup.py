@@ -9,7 +9,7 @@ from setuptools import find_packages, setup
 
 here = os.path.abspath(os.path.dirname(__file__))
 
-with open(os.path.join(here, 'README.md'), encoding='utf-8') as f:
+with open(os.path.join(here, "README.md"), encoding="utf-8") as f:
     long_description = f.read()
 long_description_content_type = "text/markdown"
 
@@ -48,23 +48,26 @@ setup(
         "Typing :: Typed",
     ],
     project_urls={
-        'Documentation': 'https://docs.mitmproxy.org/stable/',
-        'Source': 'https://github.com/mitmproxy/mitmproxy/',
-        'Tracker': 'https://github.com/mitmproxy/mitmproxy/issues',
+        "Documentation": "https://docs.mitmproxy.org/stable/",
+        "Source": "https://github.com/mitmproxy/mitmproxy/",
+        "Tracker": "https://github.com/mitmproxy/mitmproxy/issues",
     },
-    packages=find_packages(include=[
-        "mitmproxy", "mitmproxy.*",
-    ]),
+    packages=find_packages(
+        include=[
+            "mitmproxy",
+            "mitmproxy.*",
+        ]
+    ),
     include_package_data=True,
     entry_points={
-        'console_scripts': [
+        "console_scripts": [
             "mitmproxy = mitmproxy.tools.main:mitmproxy",
             "mitmdump = mitmproxy.tools.main:mitmdump",
             "mitmweb = mitmproxy.tools.main:mitmweb",
             "browserup-proxy = mitmproxy.tools.main:browserupproxy",  # YMPB
         ]
     },
-    python_requires='>=3.8',
+    python_requires=">=3.8",
     # https://packaging.python.org/en/latest/discussions/install-requires-vs-requirements/#install-requires
     # It is not considered best practice to use install_requires to pin dependencies to specific versions.
     install_requires=[
@@ -109,7 +112,7 @@ setup(
         ':sys_platform == "win32"': [
             "pydivert>=2.0.3,<2.2",
         ],
-        'dev': [
+        "dev": [
             "hypothesis>=5.8,<7",
             "parver>=0.1,<2.0",
             "pdoc>=4.0.0",
@@ -123,5 +126,5 @@ setup(
             "tox>=3.5,<4",
             "wheel>=0.36.2,<0.38",
         ],
-    }
+    },
 )

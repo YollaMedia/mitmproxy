@@ -2,43 +2,37 @@ from datetime import datetime
 from datetime import timezone
 
 
-class HarBuilder():
+class HarBuilder:
     # Default templates for building har chunks as dictionaries
 
     @staticmethod
     def har():
-        return {
-            "log": HarBuilder.log()
-        }
+        return {"log": HarBuilder.log()}
 
     @staticmethod
     def log():
         return {
             "version": "1.1",
-            "creator": {
-                "name": "BrowserUp Proxy",
-                "version": "0.1",
-                "comment": ""
-            },
+            "creator": {"name": "BrowserUp Proxy", "version": "0.1", "comment": ""},
             "entries": [],
-            "pages": []
+            "pages": [],
         }
 
     @staticmethod
     def page_timings():
-        return {
-            "onContentLoad": 0,
-            "onLoad": 0,
-            "comment": ""
-        }
+        return {"onContentLoad": 0, "onLoad": 0, "comment": ""}
 
     @staticmethod
-    def page(title="", id="", started_date_time=str(datetime.now(tz=timezone.utc).isoformat())):
+    def page(
+        title="",
+        id="",
+        started_date_time=str(datetime.now(tz=timezone.utc).isoformat()),
+    ):
         return {
             "title": title,
             "id": id,
             "startedDateTime": started_date_time,
-            "pageTimings": HarBuilder.page_timings()
+            "pageTimings": HarBuilder.page_timings(),
         }
 
     @staticmethod
@@ -47,7 +41,7 @@ class HarBuilder():
             "mimeType": "multipart/form-data",
             "params": [],
             "text": "plain posted data",
-            "comment": ""
+            "comment": "",
         }
 
     @staticmethod
@@ -62,7 +56,7 @@ class HarBuilder():
             "headersSize": 0,
             "bodySize": 0,
             "comment": "",
-            "additional": {}
+            "additional": {},
         }
 
     @staticmethod
@@ -74,7 +68,7 @@ class HarBuilder():
             "ssl": -1,
             "send": 0,
             "wait": 0,
-            "receive": 0
+            "receive": 0,
         }
 
     @staticmethod
@@ -102,10 +96,10 @@ class HarBuilder():
     @staticmethod
     def entry_response_for_failure():
         result = HarBuilder.entry_response()
-        result['status'] = 0
-        result['statusText'] = ""
-        result['httpVersion'] = "unknown"
-        result['_errorMessage'] = "No response received"
+        result["status"] = 0
+        result["statusText"] = ""
+        result["httpVersion"] = "unknown"
+        result["_errorMessage"] = "No response received"
         return result
 
     @staticmethod
@@ -114,12 +108,35 @@ class HarBuilder():
             "pageref": "",
             "startedDateTime": "",
             "time": 0,
-            "request": {},
-            "response": {},
+            # "request": {}, # YMPB
+            "request": {
+                "method": "",
+                "url": "",
+                "httpVersion": "",
+                "queryString": "",
+                "headers": [],
+                "headersSize": 0,
+            },
+            # "response": {}, # YMPB
+            "response": {
+                "status": "",
+                "statusText": "",
+                "httpVersion": "",
+                "headers": [],
+                "content": {
+                    "comment": "",
+                    "compression": 0,
+                    "encoding": "",
+                    "mimeType": "",
+                    "size": 0,
+                    "text": "",
+                },
+                "size": -1,
+            },
             "_webSocketMessages": [],
             "cache": {},
             "timings": HarBuilder.entry_timings(),
             "serverIPAddress": "",
             "connection": "",
-            "comment": ""
+            "comment": "",
         }
