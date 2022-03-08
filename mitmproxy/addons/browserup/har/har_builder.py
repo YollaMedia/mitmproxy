@@ -105,7 +105,7 @@ class HarBuilder:
     @staticmethod
     def entry():
         return {
-            "pageref": "",
+            "pageref": "Default",
             "startedDateTime": "",
             "time": 0,
             # "request": {}, # YMPB
