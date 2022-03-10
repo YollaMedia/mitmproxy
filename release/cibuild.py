@@ -474,8 +474,7 @@ def build():  # pragma: no cover
     be = BuildEnviron.from_env()
     be.dump_info()
 
-    # YMPB
-    # be.check_version()
+    # be.check_version() # YMPB
     os.makedirs(be.dist_dir, exist_ok=True)
 
     build_wheel(be) # YMPB

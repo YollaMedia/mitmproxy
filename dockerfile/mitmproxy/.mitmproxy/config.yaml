@@ -2,9 +2,10 @@ mode: "upstream:http://host.docker.internal:1082"
 ssl_insecure: True
 block_global: False
 listen_host: "0.0.0.0"
-hardump: "./hardump/testdump.har"
+# hardump: "./hardump/testdump.har"
 scripts: [
+    "mitmproxy/addons/defymapremote.py",
     # '~/mitmproxy-addons/offline.py',
-    # "examples/yolla/har_dump.py"
+    # "examples/yolla/har_dump.py",
     # '~/mitmproxy-addons/sleeper.py'
-]
+  ]

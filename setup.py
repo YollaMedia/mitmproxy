@@ -102,6 +102,7 @@ setup(
         "falcon~=2.0.0",
         "marshmallow>=3.0.0",
         "falcon-apispec>=0.4.0",
+        "pymongo",
         "python-dateutil>=2.8.1",
         "glom>=20.11.0",
         "jsonschema>=3.2.0",

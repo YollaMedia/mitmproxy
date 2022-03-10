@@ -1,6 +1,6 @@
 version: "3"
-networks:
-  ytt:
+# networks:
+#   ytt:
     # external: true
     # name: host
 
@@ -23,13 +23,14 @@ services:
     #   - HUB_HOST=selenium-hub
     #   - BMP_HOST=yttproxyserver
     volumes:
-      - ./dockerfile/mitmproxy/.mitmproxy:/home/mitmproxy/.mitmproxy
+      # - ./dockerfile/mitmproxy/.mitmproxy:/home/mitmproxy/.mitmproxy
+      - ./dockerfile/mitmproxy/.mitmproxy:/root/.mitmproxy
       - ./:/data
     # depends_on:
     #   - chromedriver
     # network_mode: "bridge"
-    networks:
-      - ytt
+    # networks:
+    #   - ytt
     extra_hosts:
       - host.docker.internal:host-gateway
     # command: ["./wait-for-it.sh", "localhost:4444/grid/api/hub", "--", "python", "./test.py"]
