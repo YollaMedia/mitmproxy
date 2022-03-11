@@ -26,6 +26,7 @@ services:
       # - ./dockerfile/mitmproxy/.mitmproxy:/home/mitmproxy/.mitmproxy
       - ./dockerfile/mitmproxy/.mitmproxy:/root/.mitmproxy
       - ./:/data
+      - ../YollaSuiteTemplateE2E/temp:/temp:rw
     # depends_on:
     #   - chromedriver
     # network_mode: "bridge"
