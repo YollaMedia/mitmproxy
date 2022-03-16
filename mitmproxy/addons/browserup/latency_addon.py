@@ -1,5 +1,5 @@
 from time import sleep
-
+from mitmproxy import ctx
 
 class LatencyResource:
 
@@ -33,6 +33,9 @@ class LatencyAddOn:
     def __init__(self):
         self.num = 0
         self.latency_ms = 0
+
+    def load(self, loader):
+        ctx.log.info('Loading LatencyAddOn')
 
     def get_resources(self):
         return [LatencyResource(self)]

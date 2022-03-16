@@ -13,12 +13,15 @@ class DefyMapRemoteSpec(typing.NamedTuple):
     replacement: str
 
 
+
 def get_temporary_mapping_data():
     new_list=[]
     temporary_mapping_data = dbclient["mitm"]["map_remote"].find()
 
     for temporary_mapping in temporary_mapping_data:
-        new_list.append(temporary_mapping)
+        if temporary_mapping["enabled"] and temporary_mapping["rule"]:
+            new_list.append(temporary_mapping)
+
     return new_list
 
 
@@ -39,30 +42,30 @@ class DefyMapRemote:
 
     def load(self, loader):
         ctx.log.info('Loading DefyMapRemoteAddOn')
-    #     loader.add_option(
-    #         "map_remote", typing.Sequence[str], [],
-    #         """
-    #         Map remote resources to another remote URL using a pattern of the form
-    #         "[/flow-filter]/url-regex/replacement", where the separator can
-    #         be any character.
-    #         """
-    #     )
+        # loader.add_option(
+        #     "map_remote", typing.Sequence[str], [],
+        #     """
+        #     Map remote resources to another remote URL using a pattern of the form
+        #     "[/flow-filter]/url-regex/replacement", where the separator can
+        #     be any character.
+        #     """
+        # )
 
     def configure(self, updated):
         ctx.log.info('Config DefyMapRemoteAddOn')
-
-        mapping_list = get_temporary_mapping_data()
+        # if "map_remote" in updated
+        map_remote = get_temporary_mapping_data()
 
         self.replacements = []
-        for option in mapping_list:
-            if option and option["enabled"] and option["rule"]:
-                ctx.log.info(option["rule"])
-                try:
-                    spec = parse_map_remote_spec(option["rule"])
-                except ValueError as e:
-                    raise exceptions.OptionsError(f"Cannot parse map_remote option {option}: {e}") from e
-                
-                self.replacements.append(spec)
+        for option in map_remote:
+            # if option and option["enabled"] and option["rule"]:
+            ctx.log.info(option["rule"])
+            try:
+                spec = parse_map_remote_spec(option["rule"])
+            except ValueError as e:
+                raise exceptions.OptionsError(f"Cannot parse map_remote option {option}: {e}") from e
+            
+            self.replacements.append(spec)
 
 
     def request(self, flow: http.HTTPFlow) -> None:

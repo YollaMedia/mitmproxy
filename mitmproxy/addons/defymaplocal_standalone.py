@@ -9,11 +9,27 @@ from werkzeug.security import safe_join
 from mitmproxy import ctx, exceptions, flowfilter, http, version
 from mitmproxy.utils.spec import parse_spec
 
+from mitmproxy.addons.defy.db import dbclient
+
 
 class MapLocalSpec(typing.NamedTuple):
     matches: flowfilter.TFilter
     regex: str
     local_path: Path
+
+
+def get_temporary_mapping_data():
+    new_list=[]
+    temporary_mapping_data = dbclient["mitm"]["map_local"].find()
+
+    for temporary_mapping in temporary_mapping_data:
+        # ctx.log.info(temporary_mapping)
+        if temporary_mapping["enabled"] and temporary_mapping["rule"]:
+            temporary_mapping["rule"] = temporary_mapping["rule"] + "|" + temporary_mapping["file_path"]
+            # remove path from temporary_mapping
+            new_list.append(temporary_mapping)
+
+    return new_list
 
 
 def parse_map_local_spec(option: str) -> MapLocalSpec:
@@ -84,25 +100,38 @@ class DefyMapLocal:
         self.replacements: typing.List[MapLocalSpec] = []
 
     def load(self, loader):
-        loader.add_option(
-            "map_local", typing.Sequence[str], [],
-            """
-            Map remote resources to a local file using a pattern of the form
-            "[/flow-filter]/url-regex/file-or-directory-path", where the
-            separator can be any character.
-            """
-        )
+        ctx.log.info('Loading DefyMapLocalAddOn')
+        # loader.add_option(
+        #     "map_local", typing.Sequence[str], [],
+        #     """
+        #     Map remote resources to a local file using a pattern of the form
+        #     "[/flow-filter]/url-regex/file-or-directory-path", where the
+        #     separator can be any character.
+        #     """
+        # )
 
     def configure(self, updated):
-        if "map_local" in updated:
-            self.replacements = []
-            for option in ctx.options.map_local:
-                try:
-                    spec = parse_map_local_spec(option)
-                except ValueError as e:
-                    raise exceptions.OptionsError(f"Cannot parse map_local option {option}: {e}") from e
+        # if "map_local" in updated:
+        ctx.log.info('Config DefyMapLocalAddOn')
+        self.replacements = []
 
-                self.replacements.append(spec)
+        map_local = get_temporary_mapping_data()
+
+        # ctx.log.info(map_local)
+
+        for option in map_local:
+            ctx.log.info(option)
+            
+            try:
+                spec = parse_map_local_spec(option["rule"])
+                # ctx.log.info('new map local: ' + spec.regex + ' URL: ' + spec.url)
+            except ValueError as e:
+                ctx.log.info('new map local ERROR')
+                continue
+                # raise exceptions.OptionsError(f"Cannot parse map_local option: {e}") from e
+
+            ctx.log.info(spec)
+            self.replacements.append(spec)
 
     def request(self, flow: http.HTTPFlow) -> None:
         if flow.response or flow.error or not flow.live:
@@ -149,3 +178,8 @@ class DefyMapLocal:
         if all_candidates:
             flow.response = http.Response.make(404)
             ctx.log.info(f"None of the local file candidates exist: {', '.join(str(x) for x in all_candidates)}")
+
+
+addons = [
+    DefyMapLocal()
+]

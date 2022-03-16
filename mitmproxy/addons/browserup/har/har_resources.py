@@ -7,9 +7,16 @@ from mitmproxy.addons.browserup.har.har_verifications import HarVerifications
 from mitmproxy.addons.browserup.har.har_capture_types import HarCaptureTypes
 from mitmproxy.addons.browserup.har.har_schemas import ErrorSchema, CounterSchema, MatchCriteriaSchema
 from marshmallow import ValidationError
+from mitmproxy.addons.defy.addon_manager import configure_addon
+
+class VerifyResponseMixin:
+    def respond_with_bool(self, resp, bool):
+        resp.status = falcon.HTTP_200
+        resp.content_type = falcon.MEDIA_JSON
+        resp.body = json.dumps({"result": bool}, ensure_ascii=False)
 
 
-class HealthCheckResource:
+class HealthCheckResource(VerifyResponseMixin):
     def addon_path(self):
         return "healthcheck"
 
@@ -31,6 +38,36 @@ class HealthCheckResource:
         resp.content_type = falcon.MEDIA_TEXT
         resp.status = falcon.HTTP_200
 
+    def on_post(self, req, resp):
+        """YMPB Resuse the endpoint to reload addons
+        ---
+        description: Refresh Addon
+        operationId: refreshAddon
+        parameters:
+            - in: path
+              name: addon_name
+              description: addon name
+              required: true
+              schema:
+                type: string
+                pattern: /[a-zA-Z-_]{4,25}/
+        tags:
+            - BrowserUpProxy
+        responses:
+          200:
+            description: Addon refresh result
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/VerifyResult"
+        """
+        print(" => HarPageResource on_post")
+
+        addon_name = req.get_param('addon_name')
+        configure_addon()
+        result = True
+        self.respond_with_bool(resp, result)
+
 
 class RespondWithHarMixin:
     def respond_with_har(self, resp, har, har_file):
@@ -49,11 +86,6 @@ class ValidateMatchCriteriaMixin:
             raise falcon.HTTPError(falcon.HTTP_422, json.dumps({'error': err.messages}, ensure_ascii=False))
 
 
-class VerifyResponseMixin:
-    def respond_with_bool(self, resp, bool):
-        resp.status = falcon.HTTP_200
-        resp.content_type = falcon.MEDIA_JSON
-        resp.body = json.dumps({"result": bool}, ensure_ascii=False)
 
 
 class NoEntriesResponseMixin:

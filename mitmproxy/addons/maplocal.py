@@ -95,6 +95,8 @@ class MapLocal:
 
     def configure(self, updated):
         if "map_local" in updated:
+            ctx.log.info("ctx.options.map_local")
+            ctx.log.info(ctx.options.map_local)
             self.replacements = []
             for option in ctx.options.map_local:
                 try:
