@@ -1,24 +1,8 @@
 from mitmproxy import ctx, hooks
-from mitmproxy.addons.defy.db import dbclient
-
-
-def get_temporary_mapping_data():
-    new_list=[]
-    temporary_mapping_data = dbclient["mitm"]["map_local"].find()
-
-    for temporary_mapping in temporary_mapping_data:
-        # ctx.log.info(temporary_mapping)
-        if temporary_mapping["enabled"] and temporary_mapping["rule"]:
-            temporary_mapping["rule"] = temporary_mapping["rule"] + "|" + temporary_mapping["file_path"]
-            # remove path from temporary_mapping
-            new_list.append(temporary_mapping)
-
-    return new_list
-
-
+from mitmproxy.addons.defy.db import get_map_local
 
 def reset_map_local():
-    map_local = get_temporary_mapping_data()
+    map_local = get_map_local()
 
     # if ctx.options.map_local is None:
     #     ctx.options.map_local = []

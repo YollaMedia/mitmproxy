@@ -10,7 +10,9 @@ def configure_addon():
     addon_names = []
     addon_names.append(reset_map_local())
     addon_names.append(reset_map_remote())
-    
+
+    addon_names.append("url_redirect")
+
     ctx.master.addons.trigger(hooks.ConfigureHook(addon_names))
 
 

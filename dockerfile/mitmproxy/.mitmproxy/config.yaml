@@ -4,10 +4,12 @@ block_global: False
 with_dumper: True
 listen_host: "0.0.0.0"
 # hardump: "./hardump/testdump.har"
-scripts: []
-# "mitmproxy/addons/defymapremote_standalone.py",
-# "mitmproxy/addons/defymaplocal_standalone.py",
-# "mitmproxy/addons/browserup/browserup_addons_manager.py",
-# '~/mitmproxy-addons/offline.py',
-# "examples/yolla/har_dump.py",
-# '~/mitmproxy-addons/sleeper.py'
+scripts: [
+    "mitmproxy/addons/defy/defyurlredirect.py",
+    # "mitmproxy/addons/defymapremote_standalone.py",
+    # "mitmproxy/addons/defymaplocal_standalone.py",
+    # "mitmproxy/addons/browserup/browserup_addons_manager.py",
+    # '~/mitmproxy-addons/offline.py',
+    # "examples/yolla/har_dump.py",
+    # '~/mitmproxy-addons/sleeper.py'
+  ]
