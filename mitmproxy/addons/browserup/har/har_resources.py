@@ -61,12 +61,15 @@ class HealthCheckResource(VerifyResponseMixin):
                 schema:
                   $ref: "#/components/schemas/VerifyResult"
         """
-        print(" => HarPageResource on_post")
+        print(" => HealthCheckResource on_post")
 
-        addon_name = req.get_param('addon_name')
+        # addon_name = req.get_param('addon_name')
         configure_addon()
-        result = True
-        self.respond_with_bool(resp, result)
+        # result = True
+        # self.respond_with_bool(resp, result)
+        resp.body = 'OK'
+        resp.content_type = falcon.MEDIA_TEXT
+        resp.status = falcon.HTTP_200
 
 
 class RespondWithHarMixin:

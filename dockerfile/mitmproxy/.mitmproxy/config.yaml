@@ -6,6 +6,7 @@ listen_host: "0.0.0.0"
 # hardump: "./hardump/testdump.har"
 scripts: [
     "mitmproxy/addons/defy/defyurlredirect.py",
+    "mitmproxy/addons/defy/defyrewrite.py",
     # "mitmproxy/addons/defymapremote_standalone.py",
     # "mitmproxy/addons/defymaplocal_standalone.py",
     # "mitmproxy/addons/browserup/browserup_addons_manager.py",

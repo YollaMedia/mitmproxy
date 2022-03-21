@@ -2,7 +2,8 @@ import os
 from pymongo import MongoClient
 
 
-MONGO_URL = os.getenv("MONGO_MITM_URI", "mongodb://root:rootpassword@host.docker.internal:27017")
+# MONGO_URL = os.getenv("MONGO_MITM_URI", "mongodb://root:rootpassword@host.docker.internal:27017")
+MONGO_URL = os.getenv("MONGO_MITM_URI", "mongodb://host.docker.internal:27017")
 
 dbclient = MongoClient(MONGO_URL)
 
@@ -37,6 +38,16 @@ def get_url_redirect():
 
     for temporary_mapping in temporary_mapping_data:
         if temporary_mapping["enabled"] and temporary_mapping["rule"]:
+            new_list.append(temporary_mapping)
+
+    return new_list
+
+def get_rewrite():
+    new_list=[]
+    temporary_mapping_data = dbclient["mitm"]["rewrite"].find()
+
+    for temporary_mapping in temporary_mapping_data:
+        if temporary_mapping["enabled"] and temporary_mapping["location"]:
             new_list.append(temporary_mapping)
 
     return new_list
