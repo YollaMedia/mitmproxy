@@ -12,29 +12,29 @@ class UrlRedirectSpec(typing.NamedTuple):
 def parse_rewrite_spec(option):
     return UrlRedirectSpec(rule=option["rule"], location=option["location"])
 
-def test_location(flow: http.HTTPFlow, spec: UrlRedirectSpec, where: str) -> bool:
+def test_location(flow: http.HTTPFlow, spec: UrlRedirectSpec) -> bool:
     if spec.location["scheme"]:
         if not fnmatch.fnmatch(flow.request.scheme, spec.location["scheme"]):
-            ctx.log.info("Scheme not match: " + flow.request.scheme + spec.location["scheme"])
+            # ctx.log.info("Scheme not match: " + flow.request.scheme + spec.location["scheme"])
             return False
 
     if spec.location["host"]:
         if not fnmatch.fnmatch(flow.request.pretty_host, spec.location["host"]):
-            ctx.log.info("host not match: " + flow.request.pretty_host + spec.location["host"])
+            # ctx.log.info("host not match: " + flow.request.pretty_host + spec.location["host"])
             return False
 
     if spec.location["port"]:
         port = int(spec.location["port"])
         if flow.request.port != port:
-            ctx.log.info("port not match: " + flow.request.port + spec.location["port"])
+            # ctx.log.info("port not match: " + flow.request.port + spec.location["port"])
             return False
 
     if spec.location["path"]:
         if not fnmatch.fnmatch(flow.request.path, spec.location["path"]):
-            ctx.log.info("path not match: " + flow.request.path + spec.location["path"])
+            # ctx.log.info("path not match: " + flow.request.path + spec.location["path"])
             return False
 
-    ctx.log.info(where + " Location Matched")
+    # ctx.log.info(where + " Location Matched")
     return True
 
 
@@ -221,7 +221,7 @@ class DefyRewrite:
             return
 
         for spec in self.replacements:
-            if test_location(flow=flow, spec=spec, where="request"):
+            if test_location(flow=flow, spec=spec):
                 for rule in spec.rule:
                     if test_rule_match(flow=flow, rule=rule, where="request"):
                         request_replacement(flow=flow, rule=rule)
@@ -229,7 +229,7 @@ class DefyRewrite:
 
     def response(self, flow: http.HTTPFlow) -> None:
         for spec in self.replacements:
-            if test_location(flow=flow, spec=spec, where="response"):
+            if test_location(flow=flow, spec=spec):
                 for rule in spec.rule:
                     if test_rule_match(flow=flow, rule=rule, where="response"):
                         response_replacement(flow=flow, rule=rule)

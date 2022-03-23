@@ -44,4 +44,5 @@ class BrowserupProxyMaster(master.Master):
             self.errorcheck
         )
 
+        # YMPB
         configure_addon()
