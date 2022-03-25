@@ -40,13 +40,13 @@ def test_location(flow: http.HTTPFlow, spec: UrlRedirectSpec) -> bool:
 
 def test_rule_match(flow: http.HTTPFlow, rule, where):
     if not rule["enabled"]: 
-        ctx.log.info("Rule Not enabled")
+        # ctx.log.info("Rule Not enabled")
         return False
 
 
     if len(rule["where"]) > 0:
         if (where not in rule["where"]):
-            ctx.log.info("reqeust / response not matched")
+            # ctx.log.info("reqeust / response not matched")
             return False
 
 
@@ -59,7 +59,7 @@ def test_rule_match(flow: http.HTTPFlow, rule, where):
         'remove_query_param',
     ]):
         if where == 'response':
-            ctx.log.info(rule["type"] + " didn't work in response")
+            # ctx.log.info(rule["type"] + " didn't work in response")
             return False
 
 
@@ -67,7 +67,7 @@ def test_rule_match(flow: http.HTTPFlow, rule, where):
         'response_status',
     ]):
         if where == 'request':
-            ctx.log.info(rule["type"] + " didn't work in request")
+            # ctx.log.info(rule["type"] + " didn't work in request")
             return False
 
 
@@ -84,7 +84,7 @@ def test_rule_match(flow: http.HTTPFlow, rule, where):
     #     'remove_query_param',
     # ].index(rule["type"]) > -1:
     #     return False
-    ctx.log.info(where + " Rule Matched")
+    # ctx.log.info(where + " Rule Matched")
 
     return True
 
@@ -114,11 +114,16 @@ def str_replacement(content, search, replacement, case_sensitive, replace_all, i
 
 def request_replacement(flow: http.HTTPFlow, rule):
     if rule["type"] == 'add_header':
-        pass
+        if not hasattr(flow.response.headers, rule["replace"]["name"]):
+            if rule["replace"]["name"]:
+                flow.response.headers[rule["replace"]["name"]] = rule["replace"]["value"]
+
     if rule["type"] == 'modify_header':
         pass
     if rule["type"] == 'remove_header':
-        pass
+        if hasattr(flow.response.headers, rule["replace"]["name"]):
+            del flow.response.headers[rule["match"]["name"]]
+
     if rule["type"] == 'host':
         host = str_replacement(
             content=flow.request.pretty_host,
@@ -168,22 +173,36 @@ def request_replacement(flow: http.HTTPFlow, rule):
 
 def response_replacement(flow: http.HTTPFlow, rule):
     if rule["type"] == 'add_header':
-        pass
+        if not hasattr(flow.response.headers, rule["replace"]["name"]):
+            if rule["replace"]["name"]:
+                flow.response.headers[rule["replace"]["name"]] = rule["replace"]["value"]
+
     if rule["type"] == 'modify_header':
         pass
     if rule["type"] == 'remove_header':
-        pass
+        if hasattr(flow.response.headers, rule["replace"]["name"]):
+            del flow.response.headers[rule["match"]["name"]]
+
     if rule["type"] == 'response_status':
         pass
     if rule["type"] == 'body':
-        flow.response.text = str_replacement(
-            content = flow.response.text, 
-            search = rule["match"]["value"], 
-            replacement = rule["replace"]["value"], 
-            case_sensitive = rule["match"]["case_sensitive"], 
-            replace_all = rule["replace"]["replace_all"],
-            is_regex= rule["match"]["is_value_regex"])
+        try:
+            text = str_replacement(
+                content = flow.response.text, 
+                search = rule["match"]["value"], 
+                replacement = rule["replace"]["value"], 
+                case_sensitive = rule["match"]["case_sensitive"], 
+                replace_all = rule["replace"]["replace_all"],
+                is_regex= rule["match"]["is_value_regex"],
+            )
 
+            flow.response.text = text
+        except:
+            pass
+
+        # ctx.log.info(flow.response.encoding)
+        # ctx.log.info(flow.response.content)
+        # ctx.log.info("text " + flow.request.get_text())
 
 
 class DefyRewrite:

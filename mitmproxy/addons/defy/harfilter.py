@@ -4,11 +4,11 @@ from mitmproxy.addons.defy.defyrewrite import UrlRedirectSpec, test_location
 
 har_filters = []
 
-exclude_hosts = [
+har_entry_include_hosts = [
     "www.google-analytics.com",
     "securepubads.g.doubleclick.net",
     "portal.cdn.yollamedia.com",
-    "portal.yollamedia.com",
+    "*.yollamedia.com",
     "ssc.33across.com",
     "ssc-cms.33across.com",
     # aol
@@ -29,7 +29,7 @@ exclude_hosts = [
     "ssc.33across.com",
 ]
 
-for host in exclude_hosts:
+for host in har_entry_include_hosts:
     har_filters.append(
         UrlRedirectSpec([], {
             "scheme": "",
@@ -52,5 +52,3 @@ def should_flow_excluded(flow: http.HTTPFlow) -> bool:
         return False
     else:
         return True
-
-
