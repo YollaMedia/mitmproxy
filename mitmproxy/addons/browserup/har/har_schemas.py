@@ -1,5 +1,7 @@
 from marshmallow import Schema, fields
 
+class VerifyConfigSchema(Schema):
+    config = fields.Dict(required=True, description="Config")
 
 class VerifyResultSchema(Schema):
     result = fields.Boolean(required=True, description="Result True / False")

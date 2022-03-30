@@ -39,18 +39,18 @@ class HealthCheckResource(VerifyResponseMixin):
         resp.status = falcon.HTTP_200
 
     def on_post(self, req, resp):
+        # pattern: /[a-zA-Z-_]{4,25}/
         """YMPB Resuse the endpoint to reload addons
         ---
         description: Refresh Addon
         operationId: refreshAddon
-        parameters:
-            - in: path
-              name: addon_name
-              description: addon name
-              required: true
+        requestBody:
+          description: Proxy Config Data
+          required: true
+          content:
+            application/json:
               schema:
-                type: string
-                pattern: /[a-zA-Z-_]{4,25}/
+                $ref: "#/components/schemas/VerifyConfig"
         tags:
             - BrowserUpProxy
         responses:
@@ -59,12 +59,12 @@ class HealthCheckResource(VerifyResponseMixin):
             content:
               application/json:
                 schema:
-                  $ref: "#/components/schemas/VerifyResult"
+                  $ref: "#/components/schemas/VerifyConfig"
         """
         print(" => HealthCheckResource on_post")
 
-        # addon_name = req.get_param('addon_name')
-        configure_addon()
+        if req.media["config"]:
+          configure_addon(req.media["config"])
         # result = True
         # self.respond_with_bool(resp, result)
         resp.body = 'OK'

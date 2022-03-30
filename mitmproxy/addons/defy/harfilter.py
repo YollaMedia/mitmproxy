@@ -11,7 +11,7 @@ har_entry_include_hosts = [
     "*.yollamedia.com",
     "ssc.33across.com",
     "ssc-cms.33across.com",
-    # aol
+    "yolla-d.openx.net",
     "*.apx.appier.net",
     "*.bfmio.com",
     "player-cdn.beachfrontmedia.com",

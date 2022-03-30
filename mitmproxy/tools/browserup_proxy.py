@@ -7,7 +7,6 @@ from mitmproxy import master
 from mitmproxy.addons import dumper, termlog, keepserving, readfile
 from mitmproxy.addons.browserup import har_capture_addon, \
     browserup_addons_manager, latency_addon
-from mitmproxy.addons.defy.addon_manager import configure_addon
 
 
 class ErrorCheck:
@@ -43,6 +42,3 @@ class BrowserupProxyMaster(master.Master):
             readfile.ReadFileStdin(),
             self.errorcheck
         )
-
-        # YMPB
-        configure_addon()

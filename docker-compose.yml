@@ -20,9 +20,8 @@ services:
       - "10080:8080"
       - "10081:8081"
       - "10088:8088"
-    # environment:
-    #   - HUB_HOST=selenium-hub
-    #   - BMP_HOST=yttproxyserver
+    environment:
+      - MONGO_URI=${MONGO_URI}
     volumes:
       # - ./dockerfile/mitmproxy/.mitmproxy:/home/mitmproxy/.mitmproxy
       - ./dockerfile/mitmproxy/.mitmproxy:/root/.mitmproxy

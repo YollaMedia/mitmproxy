@@ -6,13 +6,20 @@ from mitmproxy.addons.defy.defymapremote import reset_map_remote
 #     return getattr(itm, "name", itm.__class__.__name__.lower())
 
 #YMPB
-def configure_addon():
+def configure_addon(config):
     ctx.log.info("reloading config...")
     addon_names = []
-    addon_names.append(reset_map_local())
-    addon_names.append(reset_map_remote())
 
+    reset_map_local(config["map_local"])
+    addon_names.append("map_local")
+
+    reset_map_remote(config["map_remote"])
+    addon_names.append("map_remote")
+
+    ctx.options.url_redirect = config["url_redirect"]
     addon_names.append("url_redirect")
+
+    ctx.options.rewrite = config["rewrite"]
     addon_names.append("rewrite")
 
     ctx.master.addons.trigger(hooks.ConfigureHook(addon_names))

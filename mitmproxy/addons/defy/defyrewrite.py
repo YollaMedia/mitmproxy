@@ -3,7 +3,6 @@ import typing
 import fnmatch
 
 from mitmproxy import ctx, http, exceptions
-from mitmproxy.addons.defy.db import get_rewrite
 
 class UrlRedirectSpec(typing.NamedTuple):
     rule: typing.List
@@ -172,6 +171,10 @@ def request_replacement(flow: http.HTTPFlow, rule):
 
 
 def response_replacement(flow: http.HTTPFlow, rule):
+    ctx.log.info(rule["replace"]["name"])
+    ctx.log.info(rule["replace"]["value"])
+    ctx.log.info(flow.response.headers)
+    
     if rule["type"] == 'add_header':
         if not hasattr(flow.response.headers, rule["replace"]["name"]):
             if rule["replace"]["name"]:
@@ -180,12 +183,19 @@ def response_replacement(flow: http.HTTPFlow, rule):
     if rule["type"] == 'modify_header':
         pass
     if rule["type"] == 'remove_header':
-        if hasattr(flow.response.headers, rule["replace"]["name"]):
+        if hasattr(flow.response.headers, rule["match"]["name"]):
+            # ctx.log.info(hasattr(flow.response.headers, rule["match"]["name"]))
             del flow.response.headers[rule["match"]["name"]]
+        
 
     if rule["type"] == 'response_status':
         pass
     if rule["type"] == 'body':
+        # Special Logic for value. If value not set, it will be replaced all
+        # Make sure this won't applies to "HOST" rewrite
+        if not rule["match"]["value"]:
+            return rule["replace"]["value"]
+
         try:
             text = str_replacement(
                 content = flow.response.text, 
@@ -211,7 +221,7 @@ class DefyRewrite:
 
     def load(self, loader):
         loader.add_option(
-            "rewrite", typing.Sequence[str], [],
+            "rewrite", typing.Sequence[typing.Dict], [],
             """
             URL Redirect
             """
@@ -219,10 +229,14 @@ class DefyRewrite:
 
     def configure(self, updated):
         if "rewrite" in updated:
-            options = get_rewrite()
+            # options = get_rewrite()
+            options = ctx.options.rewrite
+
             self.replacements = []
 
             for option in options:
+                ctx.log.info("[Rewrite] " + option["description"])
+
                 try:
                     spec = parse_rewrite_spec(option=option)
                 except ValueError as e:
@@ -232,7 +246,7 @@ class DefyRewrite:
                 except Exception as e:
                     ctx.log.info(f"Exception {option}: {e}")
 
-                self.replacements.append(spec)
+                self.replacements.append(spec)        
 
 
     def request(self, flow: http.HTTPFlow) -> None:

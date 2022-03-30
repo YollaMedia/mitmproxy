@@ -1,6 +1,6 @@
 import typing
 from mitmproxy import ctx, http, exceptions
-from mitmproxy.addons.defy.db import get_url_redirect
+# from mitmproxy.addons.defy.db import get_url_redirect
 
 class UrlRedirectSpec(typing.NamedTuple):
     rule: str
@@ -15,7 +15,7 @@ class DefyUrlRedirect:
 
     def load(self, loader):
         loader.add_option(
-            "url_redirect", typing.Sequence[str], [],
+            "url_redirect", typing.Sequence[typing.Dict], [],
             """
             URL Redirect
             """
@@ -23,10 +23,12 @@ class DefyUrlRedirect:
 
     def configure(self, updated):
         if "url_redirect" in updated:
-            options = get_url_redirect()
+            # options = get_url_redirect()
+            options = ctx.options.url_redirect
             self.replacements = []
 
             for option in options:
+                ctx.log.info("[URL Redirect] " + option["description"])
                 try:
                     spec = parse_url_redirect_spec(option=option)
                 except ValueError as e:
