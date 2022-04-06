@@ -7,22 +7,34 @@ from mitmproxy.addons.defy.defymapremote import reset_map_remote
 
 #YMPB
 def configure_addon(config):
-    ctx.log.info("reloading config...")
     addon_names = []
+    ctx.log.info("reloading config...")
+    # ctx.log.info(config)
 
-    reset_map_local(config["map_local"])
-    addon_names.append("map_local")
+    if "map_local" in config:
+        ctx.log.info("reloading map_local...")
+        reset_map_local(config["map_local"])
+        addon_names.append("map_local")
 
-    reset_map_remote(config["map_remote"])
-    addon_names.append("map_remote")
+    if "map_remote" in config:
+        ctx.log.info("reloading map_remote...")
+        reset_map_remote(config["map_remote"])
+        addon_names.append("map_remote")
 
-    ctx.options.url_redirect = config["url_redirect"]
-    addon_names.append("url_redirect")
+    if "url_redirect" in config:
+        ctx.log.info("reloading url_redirect...")
+        ctx.options.url_redirect = config["url_redirect"]
+        addon_names.append("url_redirect")
 
-    ctx.options.rewrite = config["rewrite"]
-    addon_names.append("rewrite")
+    if "rewrite" in config:
+        ctx.log.info("reloading rewrite...")
+        ctx.options.rewrite = config["rewrite"]
+        addon_names.append("rewrite")
 
-    ctx.master.addons.trigger(hooks.ConfigureHook(addon_names))
+    if len(addon_names) > 0:
+        ctx.log.info("reloading config...")
+        ctx.log.info(addon_names)
+        ctx.master.addons.trigger(hooks.ConfigureHook(addon_names))
 
 
 # def reset_addon():

@@ -1,4 +1,5 @@
 mode: "upstream:http://host.docker.internal:1082"
+anticache: True
 ssl_insecure: True
 block_global: False
 with_dumper: True
