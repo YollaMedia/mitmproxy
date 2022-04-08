@@ -118,12 +118,21 @@ ___
         print("Routes: ")
         print(self.get_all_routes(app))
         with make_server('', ctx.options.addons_management_port, app) as httpd:
+            # YMPB
+            # self.httpd = httpd
+            
             print('Starting REST API management on port: {}'.format(ctx.options.addons_management_port))
             loop = asyncio.new_event_loop()
+            
+            # YMPB
+            # self.loop = loop
+            
             asyncio.set_event_loop(loop)
             httpd.serve_forever()
 
             # https://marshmallow.readthedocs.io/en/stable/quickstart.html
+
+        print("Routes Ended")
 
 
 addons = [

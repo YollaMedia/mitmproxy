@@ -19,7 +19,7 @@ RUN rm -Rf /var/lib/apt/lists/*
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends ca-certificates jq curl
-    
+
 # netcat wget
 
 RUN update-ca-certificates
@@ -30,8 +30,10 @@ RUN pip install -r /data/requirements.txt
 
 # CMD "mitmdump --version"
 
-RUN python3 -m venv venv \
-    && venv/bin/pip install -e ".[dev]"
+# RUN python3 -m venv venv \
+#     && venv/bin/pip install -e ".[dev]"
+
+RUN pip install -e ".[dev]"
 
 # CMD "source venv/bin/activate && mitmdump --version"
 # browserup-proxy --set confdir=/home/mitmproxy/.mitmproxy

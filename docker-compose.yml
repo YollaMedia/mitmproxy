@@ -34,4 +34,5 @@ services:
     #   - ytt
     extra_hosts:
       - host.docker.internal:host-gateway
+    command: ["/root/.mitmproxy/start.sh"]
     # command: ["./wait-for-it.sh", "localhost:4444/grid/api/hub", "--", "python", "./test.py"]

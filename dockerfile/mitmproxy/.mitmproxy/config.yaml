@@ -1,17 +1,9 @@
-mode: "upstream:http://host.docker.internal:1082"
-anticache: True
-ssl_insecure: True
-block_global: False
-with_dumper: True
-listen_host: "0.0.0.0"
-# hardump: "./hardump/testdump.har"
-scripts: [
-    "mitmproxy/addons/defy/defyurlredirect.py",
-    "mitmproxy/addons/defy/defyrewrite.py",
-    # "mitmproxy/addons/defymapremote_standalone.py",
-    # "mitmproxy/addons/defymaplocal_standalone.py",
-    # "mitmproxy/addons/browserup/browserup_addons_manager.py",
-    # '~/mitmproxy-addons/offline.py',
-    # "examples/yolla/har_dump.py",
-    # '~/mitmproxy-addons/sleeper.py'
-  ]
+anticache: true
+block_global: false
+listen_host: 0.0.0.0
+mode: upstream:http://host.docker.internal:1082
+scripts:
+- mitmproxy/addons/defy/defyurlredirect.py
+- mitmproxy/addons/defy/defyrewrite.py
+ssl_insecure: true
+with_dumper: true

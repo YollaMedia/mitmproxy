@@ -1,13 +1,22 @@
+import asyncio
 from pathlib import Path
 import os
 import glob
 import json
+import yaml
 import falcon
 from mitmproxy.addons.browserup.har.har_verifications import HarVerifications
 from mitmproxy.addons.browserup.har.har_capture_types import HarCaptureTypes
 from mitmproxy.addons.browserup.har.har_schemas import ErrorSchema, CounterSchema, MatchCriteriaSchema
 from marshmallow import ValidationError
+from mitmproxy import ctx
 from mitmproxy.addons.defy.addon_manager import configure_addon
+
+def shutdownproxy():
+    ctx.master.shutdown()
+#     ctx.log.info("Shut down")
+#     raise Exception("shutdown")
+
 
 class VerifyResponseMixin:
     def respond_with_bool(self, resp, bool):
@@ -34,7 +43,17 @@ class HealthCheckResource(VerifyResponseMixin):
             200:
                 description: OK means all is well.
         """
-        resp.body = 'OK'
+        data = {}
+        opts = ctx.master.options
+
+        for k in opts.keys():
+          # if opts.has_changed(k):
+          data[k] = getattr(opts, k)
+          for k in list(data.keys()):
+            if k not in opts._options:
+              del data[k]
+
+        resp.body = json.dumps(data)
         resp.content_type = falcon.MEDIA_TEXT
         resp.status = falcon.HTTP_200
 
@@ -71,6 +90,23 @@ class HealthCheckResource(VerifyResponseMixin):
         resp.content_type = falcon.MEDIA_TEXT
         resp.status = falcon.HTTP_200
 
+    def on_put(self, req, resp):
+        # ctx.log.info(req.media["config"])
+        path = os.path.expanduser(ctx.options.confdir) + "/config.yaml"
+        with open(path, 'w') as file:
+            yaml.dump(req.media["config"], file, indent=4)
+
+        # asyncio.create_task(ctx.master.shutdown())
+        ctx.master.shutdown()
+        # loop = asyncio.get_event_loop()
+        resp.body = "OK"
+        resp.content_type = falcon.MEDIA_TEXT
+        resp.status = falcon.HTTP_200
+        # ctx.master.shutdown()
+        # raise Exception("shutdown")
+        # loop = asyncio.get_event_loop()
+        # loop.run_until_complete(shutdownproxy())
+
 
 class RespondWithHarMixin:
     def respond_with_har(self, resp, har, har_file):
@@ -87,9 +123,6 @@ class ValidateMatchCriteriaMixin:
         except ValidationError as err:
             resp.content_type = falcon.MEDIA_JSON
             raise falcon.HTTPError(falcon.HTTP_422, json.dumps({'error': err.messages}, ensure_ascii=False))
-
-
-
 
 class NoEntriesResponseMixin:
     def respond_with_no_entries_error(self, resp, bool):
