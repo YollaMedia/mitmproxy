@@ -121,7 +121,7 @@ def standalone_binaries():
     with archive(DIST_DIR / f"mitmproxy-{version()}-{operating_system()}") as f:
         _pyinstaller("standalone.spec")
 
-        for tool in ["mitmproxy", "mitmdump", "mitmweb"]:
+        for tool in ["mitmproxy", "mitmdump", "mitmweb", "browserup-proxy"]:
             executable = TEMP_DIR / "pyinstaller/dist" / tool
             if platform.system() == "Windows":
                 executable = executable.with_suffix(".exe")
@@ -138,7 +138,7 @@ def _ensure_pyinstaller_onedir():
     if not (TEMP_DIR / "pyinstaller/dist/onedir").exists():
         _pyinstaller("windows-dir.spec")
 
-    for tool in ["mitmproxy", "mitmdump", "mitmweb"]:
+    for tool in ["mitmproxy", "mitmdump", "mitmweb", "browserup-proxy"]:
         print(f"> {tool} --version")
         executable = (TEMP_DIR / "pyinstaller/dist/onedir" / tool).with_suffix(".exe")
         subprocess.check_call([executable, "--version"])
@@ -257,7 +257,7 @@ def installbuilder_installer():
         [installer, "--mode", "unattended", "--unattendedmodeui", "none"], check=True
     )
     MITMPROXY_INSTALL_DIR = Path(rf"C:\Program Files\mitmproxy\bin")
-    for tool in ["mitmproxy", "mitmdump", "mitmweb"]:
+    for tool in ["mitmproxy", "mitmdump", "mitmweb", "browserup-proxy"]:
         executable = (MITMPROXY_INSTALL_DIR / tool).with_suffix(".exe")
         print(f"> {executable} --version")
         subprocess.check_call([executable, "--version"])

@@ -64,6 +64,7 @@ setup(
             "mitmproxy = mitmproxy.tools.main:mitmproxy",
             "mitmdump = mitmproxy.tools.main:mitmdump",
             "mitmweb = mitmproxy.tools.main:mitmweb",
+            "browserup-proxy = mitmproxy.tools.main:browserupproxy",
         ],
         "pyinstaller40": [
             "hook-dirs = mitmproxy.utils.pyinstaller:hook_dirs",
@@ -98,6 +99,18 @@ setup(
         "publicsuffix2>=2.20190812,<3",
         "zstandard>=0.11,<0.20",
         "typing-extensions>=4.3,<4.5; python_version<'3.10'",
+        # ========= YMPB =========
+        "bs4",
+        "falcon~=2.0.0",
+        "marshmallow>=3.0.0",
+        "falcon-apispec>=0.4.0",
+        # "pymongo",
+        "pyasn1",
+        "python-dateutil>=2.8.1",
+        "glom>=20.11.0",
+        "jsonschema>=3.2.0",
+        "jsonpath_ng>=1.5.3",
+        # ========= YMPB =========
     ],
     extras_require={
         ':sys_platform == "win32"': [

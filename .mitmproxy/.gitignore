@@ -1,0 +1,4 @@
+*.cer
+*.p12
+*.pem
+config.yaml

@@ -4,7 +4,7 @@ from PyInstaller.building.api import PYZ, EXE, COLLECT
 from PyInstaller.building.build_main import Analysis
 
 here = Path(r".")
-tools = ["mitmproxy", "mitmdump", "mitmweb"]
+tools = ["mitmproxy", "mitmdump", "mitmweb", "browserup-proxy"]
 
 analysis = Analysis(
     tools,
