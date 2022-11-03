@@ -378,6 +378,20 @@
           }
         }
       }
+    },
+    "/proxyconfig": {
+      "get": {
+        "description": "Get the ProxyConfig",
+        "operationId": "ProxyConfig",
+        "tags": [
+          "BrowserUpProxy"
+        ],
+        "responses": {
+          "200": {
+            "description": "Config in JSON"
+          }
+        }
+      }
     }
   },
   "openapi": "3.0.3",
@@ -386,13 +400,13 @@
       "NameValuePair": {
         "type": "object",
         "properties": {
-          "value": {
-            "type": "string",
-            "description": "Value to match"
-          },
           "name": {
             "type": "string",
             "description": "Name to match"
+          },
+          "value": {
+            "type": "string",
+            "description": "Value to match"
           }
         }
       },
@@ -513,10 +527,6 @@
       "VerifyResult": {
         "type": "object",
         "properties": {
-          "result": {
-            "type": "boolean",
-            "description": "Result True / False"
-          },
           "type": {
             "type": "string",
             "description": "Type"
@@ -524,6 +534,10 @@
           "name": {
             "type": "string",
             "description": "Name"
+          },
+          "result": {
+            "type": "boolean",
+            "description": "Result True / False"
           }
         },
         "required": [
@@ -548,14 +562,14 @@
       "Counter": {
         "type": "object",
         "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of Custom Counter value you are adding to the page under _counters"
+          },
           "value": {
             "type": "number",
             "format": "double",
             "description": "Value for the counter"
-          },
-          "name": {
-            "type": "string",
-            "description": "Name of Custom Counter value you are adding to the page under _counters"
           }
         },
         "required": [

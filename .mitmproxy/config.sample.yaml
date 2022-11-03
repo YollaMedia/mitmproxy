@@ -1,4 +1,4 @@
-# mode: "upstream:http://host.docker.internal:1082"
+# mode: ["upstream:http://host.docker.internal:1082"]
 anticache: True
 ssl_insecure: True
 block_global: False
@@ -6,6 +6,7 @@ with_dumper: True
 listen_host: "0.0.0.0"
 listen_port: 10800
 web_port: 10801
+addons_management_port: 8088
 # onboarding_port: 80
 
 # hardump: "./hardump/testdump.har"

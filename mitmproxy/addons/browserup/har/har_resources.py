@@ -3,12 +3,16 @@ import os
 import glob
 import json
 import falcon
+from mitmproxy import ctx
 from mitmproxy.addons.browserup.har.har_verifications import HarVerifications
 from mitmproxy.addons.browserup.har.har_capture_types import HarCaptureTypes
+# from mitmproxy.options import Options
 
 from mitmproxy.addons.browserup.har.har_schemas import ErrorSchema, CounterSchema, MatchCriteriaSchema
 from marshmallow import ValidationError
-
+# from stringcase import camelcase, snakecase
+# from jetblack_serialization import SerializerConfig
+# from jetblack_serialization.json import serialize
 
 class HealthCheckResource:
     def addon_path(self):
@@ -531,3 +535,40 @@ class ErrorResource():
             resp.body = json.dumps({'error': err.messages}, ensure_ascii=False)
         else:
             resp.status = falcon.HTTP_204
+
+
+class RespondWithJosnMixin:
+    def respond_with_json(self, resp, data):
+        resp.status = falcon.HTTP_200
+        resp.content_type = falcon.MEDIA_JSON
+        resp.body = json.dumps({'data': data}, ensure_ascii=False)
+
+
+# YMPB
+class ProxyConfigResource(RespondWithJosnMixin):
+    def __init__(self, HarCaptureAddon):
+        self.name = "harcapture"
+        self.HarCaptureAddon = HarCaptureAddon
+
+    def addon_path(self):
+        return "proxyconfig"
+
+    def apispec(self, spec):
+        spec.path(resource=self)
+
+    def on_get(self, req, resp):
+        """Gets the ProxyConfig.
+        ---
+        description: Get the ProxyConfig
+        operationId: ProxyConfig
+        tags:
+            - BrowserUpProxy
+        responses:
+            200:
+                description: Config in JSON
+        """
+        options = {}
+        for option in list(ctx.options.items()):
+            options[option[0]] = option[1].current()
+
+        self.respond_with_json(resp, options)

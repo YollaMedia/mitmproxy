@@ -164,7 +164,9 @@ def browserupproxy(args=None) -> Optional[int]:  # pragma: no cover
             )
         return {}
 
-    m = run(browserup_proxy.BrowserupProxyMaster, cmdline.mitmdump, args, extra)
-    if m and m.errorcheck.has_errored:  # type: ignore
-        return 1
+    # m = run(browserup_proxy.BrowserupProxyMaster, cmdline.mitmdump, args, extra)
+    # if m and m.errorcheck.has_errored:  # type: ignore
+    #     return 1
+
+    run(browserup_proxy.BrowserupProxyMaster, cmdline.mitmdump, args, extra)
     return None

@@ -130,8 +130,24 @@ class FlowCaptureMixin(object):
         har_entry['timings'] = t
 
         if flow.server_conn.connected:
-            har_entry["serverIPAddress"] = str(
-                flow.server_conn.ip_address[0])
+            """ YMPB
+            When using upstream mode, `peername` will be `None`.
+            If is `None`, set it with values from `via`
+            """
+            # har_entry["serverIPAddress"] = str(
+            #     flow.server_conn.peername[0])
+            serverIPAddress = '0.0.0.0'
+
+            # if flow.server_conn.peername is None:
+            #     if flow.server_conn.via is not None:
+            #         serverIPAddress = str(flow.server_conn.via[0]) + str(flow.server_conn.via[1])
+            # else:
+            #     serverIPAddress = str(flow.server_conn.peername[0]) + str(flow.server_conn.peername[1])
+
+            if flow.server_conn.peername is not None:
+                serverIPAddress = ':'.join(list(map(str, flow.server_conn.peername)))
+
+            har_entry["serverIPAddress"] = serverIPAddress
 
         flow.set_har_entry(har_entry)
         ctx.log.debug('Populated har entry for response: {}, entry: {}'.format(flow.request.url, str(har_entry)))
