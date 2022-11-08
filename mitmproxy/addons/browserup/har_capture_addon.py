@@ -8,6 +8,7 @@ from mitmproxy.addons.browserup.har.har_resources import HarResource, HarPageRes
 from mitmproxy.addons.browserup.har.har_manager import HarManagerMixin
 from mitmproxy.addons.browserup.har.flow_capture import FlowCaptureMixin
 from mitmproxy.addons.browserup.har import flow_har_entry_patch
+from mitmproxy.addons.defy.harfilter import should_flow_excluded
 flow_har_entry_patch.patch_flow()  # patch flow object with a har entry method
 
 
@@ -32,16 +33,26 @@ class HarCaptureAddOn(FlowCaptureMixin, HarManagerMixin):
                 ]
 
     def websocket_message(self, flow: mitmproxy.http.HTTPFlow):
+        # YMPB
+        if should_flow_excluded(flow=flow):
+            return
         if 'blocklisted' in flow.metadata:
             return
         self.capture_websocket_message(flow)
 
     def request(self, flow: mitmproxy.http.HTTPFlow):
+        # YMPB
+        if should_flow_excluded(flow=flow):
+            ctx.log.info("flow skipped")
+            return
         if 'blocklisted' in flow.metadata:
             return
         self.capture_request(flow)
 
     def response(self, flow: mitmproxy.http.HTTPFlow):
+        # YMPB
+        if should_flow_excluded(flow=flow):
+            return
         if 'blocklisted' in flow.metadata:
             ctx.log.debug('Blocklist filtered, return nothing.')
             return
