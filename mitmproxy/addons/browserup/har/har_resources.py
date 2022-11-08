@@ -13,6 +13,8 @@ from marshmallow import ValidationError
 # from stringcase import camelcase, snakecase
 # from jetblack_serialization import SerializerConfig
 # from jetblack_serialization.json import serialize
+from mitmproxy.addons.defy.utils.configmanager import configure_addon
+
 
 class HealthCheckResource:
     def addon_path(self):
@@ -547,7 +549,7 @@ class RespondWithJosnMixin:
 # YMPB
 class ProxyConfigResource(RespondWithJosnMixin):
     def __init__(self, HarCaptureAddon):
-        self.name = "harcapture"
+        self.name = "proxyconfig"
         self.HarCaptureAddon = HarCaptureAddon
 
     def addon_path(self):
@@ -557,12 +559,12 @@ class ProxyConfigResource(RespondWithJosnMixin):
         spec.path(resource=self)
 
     def on_get(self, req, resp):
-        """Gets the ProxyConfig.
+        """Get ProxyConfig.
         ---
-        description: Get the ProxyConfig
+        description: Get All Proxy Options
         operationId: ProxyConfig
         tags:
-            - BrowserUpProxy
+            - DefyConfigManager
         responses:
             200:
                 description: Config in JSON
@@ -572,3 +574,19 @@ class ProxyConfigResource(RespondWithJosnMixin):
             options[option[0]] = option[1].current()
 
         self.respond_with_json(resp, options)
+
+    def on_post(self, req, resp):
+        """Set ProxyConfig.
+        ---
+        description: Set Proxy Options
+        operationId: ProxyConfig
+        tags:
+            - DefyConfigManager
+        responses:
+            200:
+                description: Config in JSON
+        """
+        if req.media["config"]:
+            configure_addon(req.media["config"])
+
+        self.on_get(req, resp)

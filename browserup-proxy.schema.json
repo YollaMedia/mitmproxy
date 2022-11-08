@@ -381,10 +381,22 @@
     },
     "/proxyconfig": {
       "get": {
-        "description": "Get the ProxyConfig",
+        "description": "Get All Proxy Options",
         "operationId": "ProxyConfig",
         "tags": [
-          "BrowserUpProxy"
+          "DefyConfigManager"
+        ],
+        "responses": {
+          "200": {
+            "description": "Config in JSON"
+          }
+        }
+      },
+      "post": {
+        "description": "Set Proxy Options",
+        "operationId": "ProxyConfig",
+        "tags": [
+          "DefyConfigManager"
         ],
         "responses": {
           "200": {
@@ -400,13 +412,13 @@
       "NameValuePair": {
         "type": "object",
         "properties": {
-          "name": {
-            "type": "string",
-            "description": "Name to match"
-          },
           "value": {
             "type": "string",
             "description": "Value to match"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name to match"
           }
         }
       },
@@ -527,17 +539,17 @@
       "VerifyResult": {
         "type": "object",
         "properties": {
-          "type": {
-            "type": "string",
-            "description": "Type"
+          "result": {
+            "type": "boolean",
+            "description": "Result True / False"
           },
           "name": {
             "type": "string",
             "description": "Name"
           },
-          "result": {
-            "type": "boolean",
-            "description": "Result True / False"
+          "type": {
+            "type": "string",
+            "description": "Type"
           }
         },
         "required": [
@@ -549,27 +561,27 @@
       "Error": {
         "type": "object",
         "properties": {
-          "details": {
-            "type": "string",
-            "description": "Short details of the error"
-          },
           "name": {
             "type": "string",
             "description": "Name of the Error to add. Stored in har under _errors"
+          },
+          "details": {
+            "type": "string",
+            "description": "Short details of the error"
           }
         }
       },
       "Counter": {
         "type": "object",
         "properties": {
-          "name": {
-            "type": "string",
-            "description": "Name of Custom Counter value you are adding to the page under _counters"
-          },
           "value": {
             "type": "number",
             "format": "double",
             "description": "Value for the counter"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of Custom Counter value you are adding to the page under _counters"
           }
         },
         "required": [

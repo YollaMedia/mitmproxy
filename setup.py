@@ -110,8 +110,8 @@ setup(
         "glom>=20.11.0",
         "jsonschema>=3.2.0",
         "jsonpath_ng>=1.5.3",
-        "stringcase",
-        "jetblack-serialization",
+        # "stringcase",
+        # "jetblack-serialization",
         # ========= YMPB =========
     ],
     extras_require={
